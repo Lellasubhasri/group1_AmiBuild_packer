@@ -15,3 +15,11 @@ provisioner "ansible" {
 }
 
 Both server were tested and working fine
+
+Create Packer configuration that creates Blue and Green AMIs    
+
+used Ansible playbook from the previous ticket in build provisioners
+
+AMI are latest Ubuntu AMI from AWS
+
+create AMI in the region with default VPC (Osaka) and then AMI is shared with eu-west-1
