@@ -1,1 +1,1 @@
-ami_prefix = "BLUE-green-packer"
+ami_prefix = "AMI-BUILD"

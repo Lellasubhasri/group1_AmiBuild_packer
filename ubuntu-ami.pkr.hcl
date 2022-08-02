@@ -9,7 +9,7 @@ packer {
 
 variable "ami_prefix" {
   type    = string
-  default = "Blue-green-packer"
+  default = "AMI-BUILD"
 }
 
 
@@ -19,8 +19,8 @@ locals {
 }
 
 
-source "amazon-ebs" "ubuntu" {
-  ami_name      = "${var.ami_prefix}-${local.timestamp}"
+source "amazon-ebs" "Blue" {
+  ami_name      = "${var.ami_prefix}-Blue-${local.timestamp}"
   instance_type = "t3.small"
   region        = "ap-northeast-3"
  
@@ -38,8 +38,8 @@ source "amazon-ebs" "ubuntu" {
   
 }
 
-source "amazon-ebs" "ubuntu-focal" {
-  ami_name      = "${var.ami_prefix}-focal-${local.timestamp}"
+source "amazon-ebs" "Green" {
+  ami_name      = "${var.ami_prefix}-Green-${local.timestamp}"
   instance_type = "t3.small"
   region        = "ap-northeast-3"
   source_ami_filter {
@@ -55,10 +55,19 @@ source "amazon-ebs" "ubuntu-focal" {
 }
 
 build {
-  name = "bg-packer"
+  name = "  BlueGreen-packer"
   sources = [
-    "source.amazon-ebs.ubuntu",
-    "source.amazon-ebs.ubuntu-focal"
+    "source.amazon-ebs.Blue",
+    "source.amazon-ebs.Green"
   ]
-}
+  provisioner "ansible" {
+    playbook_file   = "./playbooks/blue/bluewebserver.yml"
   
+}
+
+  provisioner "ansible" {
+    playbook_file   = "./playbooks/green/greenwebserver.yml"
+  
+}
+
+}
